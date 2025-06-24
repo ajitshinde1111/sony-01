@@ -9,7 +9,8 @@ collection = db['contacts']
 
 @app.route('/')
 def index():
-    return send_file('index.html')   
+    return send_file('index.html')   # ← इथे बदल
+
 @app.route('/submit', methods=['POST'])
 def submit():
     name = request.form['name']
@@ -25,5 +26,4 @@ def submit():
     return "✅ Thank you! Your message has been received."
 
 if __name__ == '__main__':
-
     app.run(debug=True)
