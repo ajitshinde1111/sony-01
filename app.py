@@ -27,11 +27,13 @@ def index():
 def submit():
     name = request.form['name']
     email = request.form['email']
+    subject = request.form['subject']  # ✅ Added subject
     message = request.form['message']
 
     collection.insert_one({
         'name': name,
         'email': email,
+        'subject': subject,  # ✅ Save subject to DB
         'message': message
     })
 
