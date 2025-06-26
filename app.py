@@ -9,7 +9,7 @@ import os
 # Load environment variables from .env
 load_dotenv()
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Get Mongo URI from environment
 mongo_uri = os.environ.get("MONGO_URI")
