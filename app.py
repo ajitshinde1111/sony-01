@@ -1,6 +1,23 @@
 from flask import Flask, request, send_file
 from pymongo import MongoClient
 from urllib.parse import quote_plus
+from flask import Flask, request, send_file
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env
+load_dotenv()
+
+app = Flask(_name_)
+
+# Get Mongo URI from environment
+mongo_uri = os.environ.get("MONGO_URI")
+client = MongoClient(mongo_uri)
+db = client["portfolio_db"]
+collection = db["contacts"]
+
+# बाकी कोड तुमच्यासारखाच राहील
 
 app = Flask(__name__)
 
