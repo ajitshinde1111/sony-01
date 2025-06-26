@@ -7,9 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', function (e) {
     const name = form.name.value.trim();
     const email = form.email.value.trim();
+    const subject = form.subject.value.trim();  // ← subject जोडला
     const message = form.message.value.trim();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !subject || !message) {
       alert('Please fill in all required fields.');
       e.preventDefault();
     } else if (!validateEmail(email)) {
