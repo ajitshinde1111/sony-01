@@ -1,12 +1,13 @@
 // script.js - Portfolio Interactivity
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Form validation
   const form = document.getElementById('contactForm');
 
   form.addEventListener('submit', function (e) {
     const name = form.name.value.trim();
     const email = form.email.value.trim();
-    const subject = form.subject.value.trim();
+    const subject = form.subject.value.trim();  // ← subject जोडला
     const message = form.message.value.trim();
 
     if (!name || !email || !subject || !message) {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Email format check
   function validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);

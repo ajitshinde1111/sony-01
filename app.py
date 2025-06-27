@@ -1,43 +1,56 @@
-from flask import Flask, request, send_from_directory, redirect
+from flask import Flask, request, send_file
 from pymongo import MongoClient
 from urllib.parse import quote_plus
+from flask import Flask, request, send_file
+from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
+# Load environment variables from .env
 load_dotenv()
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__)
 
-# MongoDB credentials from environment or hardcoded (safer to use .env)
-username = quote_plus(os.getenv("DB_USER", "sony-01user"))
-password = quote_plus(os.getenv("DB_PASS", "ajitshinde.4may2007"))
-cluster_url = os.getenv("DB_CLUSTER", "sony-01cloud.u6y3eqh.mongodb.net")
+# Get Mongo URI from environment
+mongo_uri = os.environ.get("MONGO_URI")
+client = MongoClient(mongo_uri)
+db = client["portfolio_db"]
+collection = db["contacts"]
 
-connection_string = f"mongodb+srv://sony-01user:<ajitshinde.4may2007>@sony-01cloud.u6y3eqh.mongodb.net/?retryWrites=true&w=majority&appName=sony-01cloud"
+# बाकी कोड तुमच्यासारखाच राहील
 
+app = Flask(__name__)
+
+# MongoDB Username and Password (Encoded)
+username = quote_plus("sony-01user")
+password = quote_plus("ajitshinde.4may2007")
+
+# Cluster URL
+cluster_url = "sony-01cloud.u6y3eqh.mongodb.net"
+
+# ✅ Correct Connection String using variables
+connection_string = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
+
+# Connect to MongoDB
 client = MongoClient(connection_string)
 db = client['portfolio_db']
 collection = db['contacts']
 
 @app.route('/')
 def index():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_file('index.html')  # Make sure index.html is in same folder
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    name = request.form.get('name')
-    email = request.form.get('email')
-    subject = request.form.get('subject')
-    message = request.form.get('message')
-
-    if not name or not email or not subject or not message:
-        return "❌ All fields are required.", 400
+    name = request.form['name']
+    email = request.form['email']
+    subject = request.form['subject']  # ✅ Added subject
+    message = request.form['message']
 
     collection.insert_one({
         'name': name,
         'email': email,
-        'subject': subject,
+        'subject': subject,  # ✅ Save subject to DB
         'message': message
     })
 
