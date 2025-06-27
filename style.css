@@ -9,8 +9,8 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7fa;
-  color: #333;
+  background-color: #f9fafb;
+  color: #1f2937;
   line-height: 1.6;
 }
 
@@ -26,7 +26,7 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.navbar .logo {
+.logo {
   color: #fff;
   font-size: 1.5rem;
   font-weight: bold;
@@ -56,11 +56,11 @@ body {
 }
 
 .section h2 {
-  color: #1e3a8a;
   font-size: 2rem;
-  margin-bottom: 1rem;
+  color: #1e3a8a;
   border-bottom: 2px solid #1e3a8a;
   display: inline-block;
+  margin-bottom: 1rem;
 }
 
 .intro {
@@ -77,27 +77,26 @@ body {
 
 .intro .title {
   font-size: 1.5rem;
-  margin-top: 0.5rem;
-  font-weight: 600;
   color: #111827;
+  font-weight: 600;
+  margin-top: 0.5rem;
 }
 
 .intro .desc {
   margin-top: 1rem;
+  color: #374151;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  color: #374151;
 }
 
 .skills span {
-  background-color: #e0f2fe;
+  background: #e0f2fe;
   color: #0369a1;
   padding: 0.5rem 1rem;
+  border-radius: 5px;
   margin: 0.3rem;
   display: inline-block;
-  border-radius: 5px;
-  font-weight: 500;
 }
 
 .project-card {
@@ -105,17 +104,15 @@ body {
   padding: 1.5rem;
   border-radius: 10px;
   margin-top: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .project-card h3 {
   color: #1d4ed8;
-  margin-bottom: 0.5rem;
 }
 
 .contact-info li {
   margin-bottom: 0.5rem;
-  font-size: 1.1rem;
 }
 
 .contact-info a {
@@ -124,11 +121,11 @@ body {
 }
 
 .contact-form {
-  background-color: #fff;
+  background: #fff;
   padding: 2rem;
-  margin-top: 2rem;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .contact-form label {
@@ -152,8 +149,8 @@ body {
 .contact-form input[type="submit"] {
   background-color: #1e3a8a;
   color: white;
-  border: none;
   padding: 0.8rem 1.5rem;
+  border: none;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
@@ -166,9 +163,9 @@ body {
 
 footer {
   text-align: center;
-  padding: 2rem;
   background: #1e3a8a;
   color: white;
+  padding: 2rem;
   margin-top: 3rem;
 }
 
@@ -184,14 +181,14 @@ ul li {
 @media (max-width: 768px) {
   .nav-links {
     flex-direction: column;
-    background: #1e3a8a;
-  }
-
-  .section {
-    padding: 2rem 1rem;
+    gap: 1rem;
   }
 
   .intro h1 {
     font-size: 2rem;
+  }
+
+  .section {
+    padding: 2rem 1rem;
   }
 }
