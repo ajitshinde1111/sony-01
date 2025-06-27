@@ -14,7 +14,7 @@ username = quote_plus(os.getenv("DB_USER", "sony-01user"))
 password = quote_plus(os.getenv("DB_PASS", "ajitshinde.4may2007"))
 cluster_url = os.getenv("DB_CLUSTER", "sony-01cloud.u6y3eqh.mongodb.net")
 
-connection_string = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
+connection_string = f"mongodb+srv://sony-01user:<ajitshinde.4may2007>@sony-01cloud.u6y3eqh.mongodb.net/?retryWrites=true&w=majority&appName=sony-01cloud"
 
 client = MongoClient(connection_string)
 db = client['portfolio_db']
