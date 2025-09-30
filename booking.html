@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container" style="max-width:500px;margin-top:48px;">
+        <h2 style="color:#004f9f;">Book an Appointment</h2>
+        <form id="bookingForm" class="booking-form">
+            <label>Doctor Name
+                <input type="text" name="doctor" id="bookingDoctor" readonly required>
+            </label>
+            <label>Specialty
+                <input type="text" name="specialty" id="bookingSpecialty" readonly required>
+            </label>
+            <label>Location
+                <input type="text" name="location" id="bookingLocation" readonly required>
+            </label>
+            <label>Patient Name
+                <input type="text" name="patient" required placeholder="Your Name">
+            </label>
+            <label>Contact Number
+                <input type="tel" name="contact" required placeholder="Phone Number">
+            </label>
+            <label>Email
+                <input type="email" name="email" required placeholder="Email">
+            </label>
+            <label>Date
+                <input type="date" name="date" required>
+            </label>
+            <label>Time
+                <input type="time" name="time" required>
+            </label>
+            <button type="submit" class="book-btn" style="width:100%;margin-top:18px;">Submit</button>
+        </form>
+        <div id="bookingSuccess" style="display:none;color:#1e90ff;font-weight:500;margin-top:18px;text-align:center;">Appointment booked successfully!</div>
+    </div>
+    <script src="booking.js"></script>
+</body>
+</html>
