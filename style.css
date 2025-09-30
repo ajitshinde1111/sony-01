@@ -1,275 +1,634 @@
-// Facility info show/hide logic
-const facilityMap = {
-	hospitals: 'hospitals-info',
-	clinics: 'clinics-info',
-	labs: 'labs-info',
-	pharmacy: 'pharmacy-info'
-};
-function hideAllFacilities() {
-	Object.values(facilityMap).forEach(id => {
-		const el = document.getElementById(id);
-		if (el) el.style.display = 'none';
-	});
+/* Facility Info Sections */
+.facility-info-section {
+	background: #f7fafd;
+	padding: 56px 0 40px 0;
+	animation: fadeIn 0.5s;
 }
-function showFacility(id) {
-	hideAllFacilities();
-	const el = document.getElementById(id);
-	if (el) {
-		el.style.display = 'block';
-		el.scrollIntoView({ behavior: 'smooth' });
+.facility-info-section h2 {
+	color: #004f9f;
+	font-size: 2rem;
+	margin-bottom: 18px;
+	font-weight: 700;
+	text-align: center;
+}
+.facility-info-section p {
+	font-size: 1.08rem;
+	color: #222;
+	margin-bottom: 18px;
+	text-align: center;
+}
+.facility-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 28px;
+	justify-content: center;
+}
+.facility-card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 12px rgba(0,79,159,0.07);
+	padding: 24px 20px 20px 20px;
+	width: 270px;
+	text-align: left;
+	font-size: 1.05rem;
+	color: #004f9f;
+	border-left: 5px solid #1e90ff;
+	transition: box-shadow 0.2s, transform 0.2s;
+}
+.facility-card strong {
+	font-size: 1.13rem;
+	color: #004f9f;
+}
+.facility-card:hover {
+	box-shadow: 0 6px 24px rgba(0,79,159,0.13);
+	transform: translateY(-6px) scale(1.03);
+}
+@media (max-width: 900px) {
+	.facility-list {
+		flex-direction: column;
+		align-items: center;
+	}
+	.facility-card {
+		width: 98vw;
+		max-width: 340px;
 	}
 }
-document.querySelectorAll('.nav .dropdown a').forEach(link => {
-	const href = link.getAttribute('href');
-	if (href === '#hospitals' || href === '#clinics' || href === '#labs' || href === '#pharmacy') {
-		link.addEventListener('click', function(e) {
-			e.preventDefault();
-			const key = href.replace('#', '');
-			showFacility(facilityMap[key]);
-		});
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(30px); }
+	to { opacity: 1; transform: none; }
+}
+/* Booking Page Enhanced Styles */
+.booking-form {
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 4px 32px rgba(0,79,159,0.10);
+	padding: 36px 32px 28px 32px;
+	margin-top: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	max-width: 480px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.booking-form label {
+	font-weight: 500;
+	color: #004f9f;
+	margin-bottom: 4px;
+	display: flex;
+	flex-direction: column;
+	font-size: 1.05rem;
+	letter-spacing: 0.01em;
+}
+.booking-form input[type="text"],
+.booking-form input[type="email"],
+.booking-form input[type="tel"],
+.booking-form input[type="date"],
+.booking-form input[type="time"] {
+	padding: 12px 14px;
+	border-radius: 6px;
+	border: 2px solid #004f9f22;
+	font-size: 1.05rem;
+	margin-top: 6px;
+	margin-bottom: 2px;
+	background: #f7fafd;
+	color: #222;
+	outline: none;
+	transition: border 0.2s, box-shadow 0.2s;
+}
+.booking-form input[type="text"]:focus,
+.booking-form input[type="email"]:focus,
+.booking-form input[type="tel"]:focus,
+.booking-form input[type="date"]:focus,
+.booking-form input[type="time"]:focus {
+	border: 2px solid #1e90ff;
+	box-shadow: 0 2px 8px #1e90ff22;
+}
+.booking-form button.book-btn {
+	background: linear-gradient(90deg, #004f9f 60%, #1e90ff 100%);
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	padding: 14px 0;
+	font-size: 1.1rem;
+	font-weight: 700;
+	cursor: pointer;
+	margin-top: 10px;
+	box-shadow: 0 2px 8px rgba(0,79,159,0.08);
+	transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+	letter-spacing: 0.01em;
+}
+.booking-form button.book-btn:hover {
+	background: linear-gradient(90deg, #1e90ff 60%, #004f9f 100%);
+	box-shadow: 0 4px 16px rgba(0,79,159,0.13);
+	transform: translateY(-2px) scale(1.02);
+}
+.container > h2 {
+	text-align: center;
+	color: #004f9f;
+	font-size: 2rem;
+	margin-bottom: 0;
+	margin-top: 0;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+}
+@media (max-width: 600px) {
+	.booking-form {
+		padding: 18px 6vw 18px 6vw;
+		max-width: 98vw;
 	}
-});
-// Doctor name suggestions logic
-const doctorInput = document.getElementById('doctorInput');
-const specialtyInput = document.getElementById('specialtyInput');
-const locationInput = document.getElementById('locationInput');
-const suggestionsBox = document.getElementById('doctorSuggestions');
-
-function showDoctorSuggestions(value) {
-	const val = value.trim().toLowerCase();
-	if (!val) {
-		suggestionsBox.style.display = 'none';
-		suggestionsBox.innerHTML = '';
-		return;
+	.container > h2 {
+		font-size: 1.3rem;
 	}
-	// Show up to 5 matching doctors
-	const matches = demoDoctors.filter(doc => doc.name.toLowerCase().includes(val)).slice(0, 5);
-	if (matches.length === 0) {
-		suggestionsBox.style.display = 'none';
-		suggestionsBox.innerHTML = '';
-		return;
-	}
-	suggestionsBox.innerHTML = matches.map(doc =>
-		`<div class="suggestion-item" data-name="${doc.name}" data-specialty="${doc.specialty}" data-location="${doc.location}">
-			<strong>${doc.name}</strong><br><span style='font-size:0.97em;color:#1e90ff;'>${doc.specialty}</span> <span style='color:#444;'>${doc.location}</span>
-		</div>`
-	).join('');
-	suggestionsBox.style.display = 'block';
+}
+/* Booking Form Interactivity */
+.booking-form input[required] {
+	border: 2px solid #004f9f22;
+	transition: border 0.2s;
+}
+.booking-form input[required]:focus {
+	border: 2px solid #1e90ff;
+}
+#bookingLoading {
+	margin-top: 12px;
+	font-size: 1.08rem;
+}
+#bookingSuccess {
+	background: #e6f0fa;
+	border-radius: 6px;
+	padding: 12px 0;
+	font-size: 1.08rem;
+	box-shadow: 0 2px 8px rgba(0,79,159,0.07);
+	transition: opacity 0.4s;
+}
+/* Doctor Suggestions Dropdown */
+.suggestions-list {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	border-top: none;
+	z-index: 20;
+	max-height: 220px;
+	overflow-y: auto;
+	box-shadow: 0 4px 16px rgba(0,79,159,0.10);
+	border-radius: 0 0 8px 8px;
+}
+.suggestion-item {
+	padding: 12px 16px;
+	cursor: pointer;
+	color: #004f9f;
+	font-size: 1rem;
+	border-bottom: 1px solid #f0f0f0;
+	background: #fff;
+	transition: background 0.18s;
+}
+.suggestion-item:last-child {
+	border-bottom: none;
+}
+.suggestion-item:hover, .suggestion-item.active {
+	background: #e6f0fa;
+	color: #1e90ff;
+}
+/* Doctors Section */
+.doctors-section {
+	background: #f7fafd;
+	padding: 56px 0 40px 0;
+}
+.doctors-section h2 {
+	color: #004f9f;
+	font-size: 2rem;
+	margin-bottom: 28px;
+	font-weight: 700;
+	text-align: center;
+}
+.doctors-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 32px;
+	justify-content: center;
+}
+.doctor-card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 12px rgba(0,79,159,0.07);
+	padding: 24px 20px 20px 20px;
+	width: 260px;
+	text-align: center;
+	transition: transform 0.2s, box-shadow 0.2s;
+	cursor: pointer;
+	position: relative;
+}
+.doctor-card:hover {
+	transform: translateY(-6px) scale(1.03);
+	box-shadow: 0 6px 24px rgba(0,79,159,0.13);
+}
+.doctor-photo {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-bottom: 14px;
+	border: 3px solid #004f9f22;
+}
+.doctor-name {
+	font-size: 1.15rem;
+	font-weight: 700;
+	color: #004f9f;
+	margin-bottom: 4px;
+}
+.doctor-specialty {
+	color: #1e90ff;
+	font-size: 1rem;
+	margin-bottom: 6px;
+}
+.doctor-location {
+	color: #444;
+	font-size: 0.98rem;
+	margin-bottom: 8px;
+}
+.doctor-info {
+	font-size: 0.97rem;
+	color: #222;
+	margin-bottom: 8px;
+}
+.doctor-rating {
+	color: #f5b942;
+	font-size: 1.1rem;
+	margin-bottom: 6px;
+}
+.doctor-card .book-btn {
+	background: #004f9f;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 20px;
+	font-size: 1rem;
+	font-weight: 500;
+	cursor: pointer;
+	margin-top: 8px;
+	transition: background 0.2s;
+}
+.doctor-card .book-btn:hover {
+	background: #1e90ff;
+}
+/* Menubar Dropdown Navigation */
+.nav {
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+.menu-item {
+	position: relative;
+	margin: 0 8px;
+}
+.menu-item > a {
+	color: #222;
+	text-decoration: none;
+	font-weight: 500;
+	padding: 8px 16px;
+	display: inline-block;
+	border-radius: 4px;
+	transition: background 0.2s, color 0.2s;
+}
+.menu-item > a:hover, .menu-item > a:focus {
+	background: #e6f0fa;
+	color: #004f9f;
+}
+.has-dropdown:hover .dropdown, .has-dropdown:focus-within .dropdown {
+	display: block;
+}
+.dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: 180px;
+	background: #fff;
+	box-shadow: 0 4px 16px rgba(0,79,159,0.10);
+	border-radius: 8px;
+	z-index: 10;
+	padding: 8px 0;
+}
+.dropdown a {
+	display: block;
+	color: #004f9f;
+	text-decoration: none;
+	padding: 10px 20px;
+	font-size: 1rem;
+	border-radius: 4px;
+	transition: background 0.2s, color 0.2s;
+}
+.dropdown a:hover, .dropdown a:focus {
+	background: #e6f0fa;
+	color: #1e90ff;
 }
 
-doctorInput.addEventListener('input', e => {
-	showDoctorSuggestions(e.target.value);
-});
-
-doctorInput.addEventListener('focus', e => {
-	showDoctorSuggestions(e.target.value);
-});
-
-document.addEventListener('click', e => {
-	if (!suggestionsBox.contains(e.target) && e.target !== doctorInput) {
-		suggestionsBox.style.display = 'none';
+@media (max-width: 900px) {
+	.nav {
+		flex-direction: column;
+		align-items: flex-start;
 	}
-});
-
-suggestionsBox.addEventListener('mousedown', function(e) {
-	// Use mousedown so input doesn't lose focus before click
-	const item = e.target.closest('.suggestion-item');
-	if (item) {
-		doctorInput.value = item.getAttribute('data-name');
-		specialtyInput.value = item.getAttribute('data-specialty');
-		locationInput.value = item.getAttribute('data-location');
-		suggestionsBox.style.display = 'none';
+	.menu-item {
+		width: 100%;
 	}
-});
-
-// Keyboard navigation for suggestions
-let suggestionIndex = -1;
-doctorInput.addEventListener('keydown', function(e) {
-	const items = suggestionsBox.querySelectorAll('.suggestion-item');
-	if (!items.length) return;
-	if (e.key === 'ArrowDown') {
-		suggestionIndex = (suggestionIndex + 1) % items.length;
-		items.forEach((el, i) => el.classList.toggle('active', i === suggestionIndex));
-		e.preventDefault();
-	} else if (e.key === 'ArrowUp') {
-		suggestionIndex = (suggestionIndex - 1 + items.length) % items.length;
-		items.forEach((el, i) => el.classList.toggle('active', i === suggestionIndex));
-		e.preventDefault();
-	} else if (e.key === 'Enter') {
-		if (suggestionIndex >= 0 && items[suggestionIndex]) {
-			items[suggestionIndex].dispatchEvent(new MouseEvent('mousedown'));
-			suggestionIndex = -1;
-			e.preventDefault();
-		}
-	} else {
-		suggestionIndex = -1;
+	.dropdown {
+		position: static;
+		min-width: 100%;
+		box-shadow: none;
 	}
-});
-
-// Demo doctors data
-const demoDoctors = [
-	{
-		name: "Dr. Emily Carter",
-		specialty: "Cardiologist",
-		location: "New York, NY",
-		info: "10+ years experience, English, Spanish",
-		rating: 4.9,
-		photo: "https://randomuser.me/api/portraits/women/44.jpg"
-	},
-	{
-		name: "Dr. Michael Lee",
-		specialty: "Dermatologist",
-		location: "San Francisco, CA",
-		info: "Board-certified, English, Mandarin",
-		rating: 4.8,
-		photo: "https://randomuser.me/api/portraits/men/32.jpg"
-	},
-	{
-		name: "Dr. Priya Singh",
-		specialty: "Pediatrician",
-		location: "Chicago, IL",
-		info: "Children's health, Hindi, English",
-		rating: 4.7,
-		photo: "https://randomuser.me/api/portraits/women/68.jpg"
-	},
-	{
-		name: "Dr. David Kim",
-		specialty: "Orthopedic Surgeon",
-		location: "Seattle, WA",
-		info: "Sports injuries, Korean, English",
-		rating: 4.8,
-		photo: "https://randomuser.me/api/portraits/men/76.jpg"
-	},
-	{
-		name: "Dr. Sarah Johnson",
-		specialty: "Family Medicine",
-		location: "Austin, TX",
-		info: "Primary care, English, French",
-		rating: 4.6,
-		photo: "https://randomuser.me/api/portraits/women/12.jpg"
-	},
-	{
-		name: "Dr. Ahmed Hassan",
-		specialty: "Endocrinologist",
-		location: "Houston, TX",
-		info: "Diabetes specialist, Arabic, English",
-		rating: 4.7,
-		photo: "https://randomuser.me/api/portraits/men/41.jpg"
-	},
-	{
-		name: "Dr. Laura Martinez",
-		specialty: "Gynecologist",
-		location: "Miami, FL",
-		info: "Women's health, Spanish, English",
-		rating: 4.9,
-		photo: "https://randomuser.me/api/portraits/women/65.jpg"
-	},
-	{
-		name: "Dr. James Brown",
-		specialty: "Neurologist",
-		location: "Boston, MA",
-		info: "Brain & nerve disorders, English",
-		rating: 4.8,
-		photo: "https://randomuser.me/api/portraits/men/85.jpg"
-	},
-	{
-		name: "Dr. Mei Chen",
-		specialty: "Ophthalmologist",
-		location: "Los Angeles, CA",
-		info: "Eye care, Mandarin, English",
-		rating: 4.7,
-		photo: "https://randomuser.me/api/portraits/women/29.jpg"
-	},
-	{
-		name: "Dr. Robert Wilson",
-		specialty: "Psychiatrist",
-		location: "Denver, CO",
-		info: "Mental health, English",
-		rating: 4.6,
-		photo: "https://randomuser.me/api/portraits/men/23.jpg"
-	}
-];
-
-function renderDoctors(doctors) {
-	const list = document.getElementById('doctors-list');
-	if (!list) return;
-	list.innerHTML = '';
-	if (doctors.length === 0) {
-		list.innerHTML = '<div style="width:100%;text-align:center;color:#004f9f;font-weight:500;">No doctors found.</div>';
-		return;
-	}
-	doctors.forEach(doc => {
-		const card = document.createElement('div');
-		card.className = 'doctor-card';
-			card.innerHTML = `
-				<img src="${doc.photo}" alt="${doc.name}" class="doctor-photo">
-				<div class="doctor-name">${doc.name}</div>
-				<div class="doctor-specialty">${doc.specialty}</div>
-				<div class="doctor-location"><span>📍</span> ${doc.location}</div>
-				<div class="doctor-info">${doc.info}</div>
-				<div class="doctor-rating">${'★'.repeat(Math.round(doc.rating))} <span style="color:#888;font-size:0.95em;">(${doc.rating})</span></div>
-				<button class="book-btn" data-doctor="${encodeURIComponent(doc.name)}" data-specialty="${encodeURIComponent(doc.specialty)}" data-location="${encodeURIComponent(doc.location)}">Book</button>
-			`;
-			list.appendChild(card);
-			// Add event for Book button
-				card.querySelector('.book-btn').addEventListener('click', function() {
-					const url = `booking.html?doctor=${encodeURIComponent(doc.name)}&specialty=${encodeURIComponent(doc.specialty)}&location=${encodeURIComponent(doc.location)}`;
-					window.location.href = url;
-				});
-	});
+}
+/* Info Sections (Expanded Content) */
+.info-section {
+	padding: 56px 0 40px 0;
+	background: #fff;
+}
+.info-section.alt {
+	background: #f7fafd;
+}
+.info-section h2 {
+	color: #004f9f;
+	font-size: 2rem;
+	margin-bottom: 18px;
+	font-weight: 700;
+}
+.info-section p {
+	font-size: 1.08rem;
+	color: #222;
+	margin-bottom: 12px;
+}
+.info-section ul {
+	margin: 0 0 16px 20px;
+	color: #1e90ff;
+	font-size: 1rem;
+	padding-left: 18px;
+}
+.info-section li {
+	margin-bottom: 8px;
+	color: #004f9f;
+	line-height: 1.6;
+}
+.info-section strong {
+	color: #004f9f;
+}
+body {
+	font-family: 'Roboto', Arial, sans-serif;
+	background: #fff;
+	color: #222;
+	margin: 0;
+	padding: 0;
 }
 
-// Initial render
-document.addEventListener('DOMContentLoaded', () => {
-	renderDoctors(demoDoctors);
-});
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 24px;
+}
 
-// Filter doctors on search
-document.getElementById('doctorSearchForm').addEventListener('submit', function(e) {
-	const doctor = this.doctor.value.trim().toLowerCase();
-	const specialty = this.specialty.value.trim().toLowerCase();
-	const location = this.location.value.trim().toLowerCase();
-	if (!doctor && !specialty && !location) {
-		alert('Please enter at least one search field.');
-		e.preventDefault();
-		return;
+/* Header */
+.header {
+	background: #fff;
+	border-bottom: 1px solid #e5e5e5;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+.header-flex {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 70px;
+}
+.logo, .footer-logo {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #004f9f;
+	letter-spacing: 1px;
+}
+.logo span, .footer-logo span {
+	color: #1e90ff;
+}
+.nav a {
+	color: #222;
+	text-decoration: none;
+	margin: 0 16px;
+	font-weight: 500;
+	transition: color 0.2s;
+}
+.nav a:hover {
+	color: #004f9f;
+}
+.search-icon {
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 50%;
+	transition: background 0.2s;
+}
+.search-icon:focus, .search-icon:hover {
+	background: #e6f0fa;
+}
+
+/* Hero Section */
+.hero {
+	background: linear-gradient(90deg, #004f9f 60%, #1e90ff 100%);
+	color: #fff;
+	padding: 64px 0 48px 0;
+	text-align: center;
+}
+.hero-content h1 {
+	font-size: 2.8rem;
+	margin-bottom: 16px;
+	font-weight: 700;
+}
+.hero-content p {
+	font-size: 1.2rem;
+	margin-bottom: 32px;
+}
+.search-form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	justify-content: center;
+}
+.search-form input {
+	padding: 12px 16px;
+	border: none;
+	border-radius: 4px;
+	font-size: 1rem;
+	min-width: 180px;
+	outline: none;
+}
+.search-form button {
+	background: #fff;
+	color: #004f9f;
+	border: none;
+	border-radius: 4px;
+	padding: 12px 32px;
+	font-size: 1rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background 0.2s, color 0.2s;
+}
+.search-form button:hover {
+	background: #1e90ff;
+	color: #fff;
+}
+
+/* Quick Links Cards */
+.quick-links {
+	background: #f7fafd;
+	padding: 48px 0 32px 0;
+}
+.cards {
+	display: flex;
+	gap: 32px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+.card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 12px rgba(0,79,159,0.07);
+	padding: 32px 24px 24px 24px;
+	text-align: center;
+	width: 240px;
+	transition: transform 0.2s, box-shadow 0.2s;
+	cursor: pointer;
+}
+.card:hover {
+	transform: translateY(-8px) scale(1.03);
+	box-shadow: 0 6px 24px rgba(0,79,159,0.13);
+}
+.card img {
+	width: 48px;
+	margin-bottom: 16px;
+}
+.card h3 {
+	color: #004f9f;
+	margin-bottom: 8px;
+	font-size: 1.2rem;
+}
+.card p {
+	color: #444;
+	font-size: 1rem;
+}
+
+/* How It Works */
+.how-it-works {
+	padding: 64px 0 48px 0;
+	background: #fff;
+}
+.how-flex {
+	display: flex;
+	align-items: center;
+	gap: 48px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.how-img {
+	width: 340px;
+	border-radius: 16px;
+	box-shadow: 0 2px 16px rgba(0,79,159,0.09);
+}
+.how-text {
+	max-width: 500px;
+}
+.how-text h2 {
+	color: #004f9f;
+	margin-bottom: 16px;
+	font-size: 2rem;
+}
+.how-text ul {
+	margin: 16px 0 0 0;
+	padding-left: 20px;
+	color: #1e90ff;
+}
+.how-text li {
+	margin-bottom: 8px;
+	font-size: 1rem;
+}
+
+/* Footer */
+.footer {
+	background: #004f9f;
+	color: #fff;
+	padding: 32px 0 0 0;
+	margin-top: 48px;
+}
+.footer-flex {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+	padding-bottom: 16px;
+}
+.footer-logo {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #fff;
+}
+.footer-logo span {
+	color: #1e90ff;
+}
+.footer-links a {
+	color: #fff;
+	text-decoration: none;
+	margin: 0 12px;
+	font-weight: 500;
+	transition: color 0.2s;
+}
+.footer-links a:hover {
+	color: #1e90ff;
+}
+.footer-info a {
+	color: #cce0fa;
+	text-decoration: none;
+	margin: 0 4px;
+	font-size: 0.98rem;
+	transition: color 0.2s;
+}
+.footer-info a:hover {
+	color: #fff;
+}
+.copyright {
+	text-align: center;
+	color: #cce0fa;
+	font-size: 0.95rem;
+	padding: 12px 0 8px 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+	.cards {
+		flex-direction: column;
+		align-items: center;
 	}
-	e.preventDefault();
-	const filtered = demoDoctors.filter(doc =>
-		(!doctor || doc.name.toLowerCase().includes(doctor)) &&
-		(!specialty || doc.specialty.toLowerCase().includes(specialty)) &&
-		(!location || doc.location.toLowerCase().includes(location))
-	);
-	renderDoctors(filtered);
-	// Scroll to doctors section
-	document.getElementById('demo-doctors').scrollIntoView({ behavior: 'smooth' });
-});
-
-// Smooth scroll for nav links
-document.querySelectorAll('.nav a, .footer-links a').forEach(link => {
-		link.addEventListener('click', function(e) {
-				const href = this.getAttribute('href');
-				if (href.startsWith('#')) {
-						const target = document.querySelector(href);
-						if (target) {
-								e.preventDefault();
-								target.scrollIntoView({ behavior: 'smooth' });
-						}
-				}
-		});
-});
-
-// Card hover effect (for accessibility)
-document.querySelectorAll('.card').forEach(card => {
-		card.addEventListener('keydown', function(e) {
-				if (e.key === 'Enter' || e.key === ' ') {
-						this.classList.toggle('active');
-				}
-		});
-		card.setAttribute('tabindex', '0');
-});
-
-// Search icon focus opens search form (for demo)
-document.querySelector('.search-icon').addEventListener('click', () => {
-		document.querySelector('.search-form input').focus();
-});
+	.how-flex {
+		flex-direction: column;
+		gap: 32px;
+	}
+	.header-flex {
+		flex-direction: column;
+		height: auto;
+		gap: 12px;
+	}
+}
+@media (max-width: 600px) {
+	.hero-content h1 {
+		font-size: 2rem;
+	}
+	.how-img {
+		width: 100%;
+		max-width: 320px;
+	}
+	.container {
+		padding: 0 8px;
+	}
+	.footer-flex {
+		flex-direction: column;
+		gap: 16px;
+	}
+}
