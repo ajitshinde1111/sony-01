@@ -1,220 +1,275 @@
-/* 🎨 Global Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+// Facility info show/hide logic
+const facilityMap = {
+	hospitals: 'hospitals-info',
+	clinics: 'clinics-info',
+	labs: 'labs-info',
+	pharmacy: 'pharmacy-info'
+};
+function hideAllFacilities() {
+	Object.values(facilityMap).forEach(id => {
+		const el = document.getElementById(id);
+		if (el) el.style.display = 'none';
+	});
+}
+function showFacility(id) {
+	hideAllFacilities();
+	const el = document.getElementById(id);
+	if (el) {
+		el.style.display = 'block';
+		el.scrollIntoView({ behavior: 'smooth' });
+	}
+}
+document.querySelectorAll('.nav .dropdown a').forEach(link => {
+	const href = link.getAttribute('href');
+	if (href === '#hospitals' || href === '#clinics' || href === '#labs' || href === '#pharmacy') {
+		link.addEventListener('click', function(e) {
+			e.preventDefault();
+			const key = href.replace('#', '');
+			showFacility(facilityMap[key]);
+		});
+	}
+});
+// Doctor name suggestions logic
+const doctorInput = document.getElementById('doctorInput');
+const specialtyInput = document.getElementById('specialtyInput');
+const locationInput = document.getElementById('locationInput');
+const suggestionsBox = document.getElementById('doctorSuggestions');
+
+function showDoctorSuggestions(value) {
+	const val = value.trim().toLowerCase();
+	if (!val) {
+		suggestionsBox.style.display = 'none';
+		suggestionsBox.innerHTML = '';
+		return;
+	}
+	// Show up to 5 matching doctors
+	const matches = demoDoctors.filter(doc => doc.name.toLowerCase().includes(val)).slice(0, 5);
+	if (matches.length === 0) {
+		suggestionsBox.style.display = 'none';
+		suggestionsBox.innerHTML = '';
+		return;
+	}
+	suggestionsBox.innerHTML = matches.map(doc =>
+		`<div class="suggestion-item" data-name="${doc.name}" data-specialty="${doc.specialty}" data-location="${doc.location}">
+			<strong>${doc.name}</strong><br><span style='font-size:0.97em;color:#1e90ff;'>${doc.specialty}</span> <span style='color:#444;'>${doc.location}</span>
+		</div>`
+	).join('');
+	suggestionsBox.style.display = 'block';
 }
 
-body {
-  background: #f5f7fa;
-  color: #333;
-  line-height: 1.6;
+doctorInput.addEventListener('input', e => {
+	showDoctorSuggestions(e.target.value);
+});
+
+doctorInput.addEventListener('focus', e => {
+	showDoctorSuggestions(e.target.value);
+});
+
+document.addEventListener('click', e => {
+	if (!suggestionsBox.contains(e.target) && e.target !== doctorInput) {
+		suggestionsBox.style.display = 'none';
+	}
+});
+
+suggestionsBox.addEventListener('mousedown', function(e) {
+	// Use mousedown so input doesn't lose focus before click
+	const item = e.target.closest('.suggestion-item');
+	if (item) {
+		doctorInput.value = item.getAttribute('data-name');
+		specialtyInput.value = item.getAttribute('data-specialty');
+		locationInput.value = item.getAttribute('data-location');
+		suggestionsBox.style.display = 'none';
+	}
+});
+
+// Keyboard navigation for suggestions
+let suggestionIndex = -1;
+doctorInput.addEventListener('keydown', function(e) {
+	const items = suggestionsBox.querySelectorAll('.suggestion-item');
+	if (!items.length) return;
+	if (e.key === 'ArrowDown') {
+		suggestionIndex = (suggestionIndex + 1) % items.length;
+		items.forEach((el, i) => el.classList.toggle('active', i === suggestionIndex));
+		e.preventDefault();
+	} else if (e.key === 'ArrowUp') {
+		suggestionIndex = (suggestionIndex - 1 + items.length) % items.length;
+		items.forEach((el, i) => el.classList.toggle('active', i === suggestionIndex));
+		e.preventDefault();
+	} else if (e.key === 'Enter') {
+		if (suggestionIndex >= 0 && items[suggestionIndex]) {
+			items[suggestionIndex].dispatchEvent(new MouseEvent('mousedown'));
+			suggestionIndex = -1;
+			e.preventDefault();
+		}
+	} else {
+		suggestionIndex = -1;
+	}
+});
+
+// Demo doctors data
+const demoDoctors = [
+	{
+		name: "Dr. Emily Carter",
+		specialty: "Cardiologist",
+		location: "New York, NY",
+		info: "10+ years experience, English, Spanish",
+		rating: 4.9,
+		photo: "https://randomuser.me/api/portraits/women/44.jpg"
+	},
+	{
+		name: "Dr. Michael Lee",
+		specialty: "Dermatologist",
+		location: "San Francisco, CA",
+		info: "Board-certified, English, Mandarin",
+		rating: 4.8,
+		photo: "https://randomuser.me/api/portraits/men/32.jpg"
+	},
+	{
+		name: "Dr. Priya Singh",
+		specialty: "Pediatrician",
+		location: "Chicago, IL",
+		info: "Children's health, Hindi, English",
+		rating: 4.7,
+		photo: "https://randomuser.me/api/portraits/women/68.jpg"
+	},
+	{
+		name: "Dr. David Kim",
+		specialty: "Orthopedic Surgeon",
+		location: "Seattle, WA",
+		info: "Sports injuries, Korean, English",
+		rating: 4.8,
+		photo: "https://randomuser.me/api/portraits/men/76.jpg"
+	},
+	{
+		name: "Dr. Sarah Johnson",
+		specialty: "Family Medicine",
+		location: "Austin, TX",
+		info: "Primary care, English, French",
+		rating: 4.6,
+		photo: "https://randomuser.me/api/portraits/women/12.jpg"
+	},
+	{
+		name: "Dr. Ahmed Hassan",
+		specialty: "Endocrinologist",
+		location: "Houston, TX",
+		info: "Diabetes specialist, Arabic, English",
+		rating: 4.7,
+		photo: "https://randomuser.me/api/portraits/men/41.jpg"
+	},
+	{
+		name: "Dr. Laura Martinez",
+		specialty: "Gynecologist",
+		location: "Miami, FL",
+		info: "Women's health, Spanish, English",
+		rating: 4.9,
+		photo: "https://randomuser.me/api/portraits/women/65.jpg"
+	},
+	{
+		name: "Dr. James Brown",
+		specialty: "Neurologist",
+		location: "Boston, MA",
+		info: "Brain & nerve disorders, English",
+		rating: 4.8,
+		photo: "https://randomuser.me/api/portraits/men/85.jpg"
+	},
+	{
+		name: "Dr. Mei Chen",
+		specialty: "Ophthalmologist",
+		location: "Los Angeles, CA",
+		info: "Eye care, Mandarin, English",
+		rating: 4.7,
+		photo: "https://randomuser.me/api/portraits/women/29.jpg"
+	},
+	{
+		name: "Dr. Robert Wilson",
+		specialty: "Psychiatrist",
+		location: "Denver, CO",
+		info: "Mental health, English",
+		rating: 4.6,
+		photo: "https://randomuser.me/api/portraits/men/23.jpg"
+	}
+];
+
+function renderDoctors(doctors) {
+	const list = document.getElementById('doctors-list');
+	if (!list) return;
+	list.innerHTML = '';
+	if (doctors.length === 0) {
+		list.innerHTML = '<div style="width:100%;text-align:center;color:#004f9f;font-weight:500;">No doctors found.</div>';
+		return;
+	}
+	doctors.forEach(doc => {
+		const card = document.createElement('div');
+		card.className = 'doctor-card';
+			card.innerHTML = `
+				<img src="${doc.photo}" alt="${doc.name}" class="doctor-photo">
+				<div class="doctor-name">${doc.name}</div>
+				<div class="doctor-specialty">${doc.specialty}</div>
+				<div class="doctor-location"><span>📍</span> ${doc.location}</div>
+				<div class="doctor-info">${doc.info}</div>
+				<div class="doctor-rating">${'★'.repeat(Math.round(doc.rating))} <span style="color:#888;font-size:0.95em;">(${doc.rating})</span></div>
+				<button class="book-btn" data-doctor="${encodeURIComponent(doc.name)}" data-specialty="${encodeURIComponent(doc.specialty)}" data-location="${encodeURIComponent(doc.location)}">Book</button>
+			`;
+			list.appendChild(card);
+			// Add event for Book button
+				card.querySelector('.book-btn').addEventListener('click', function() {
+					const url = `booking.html?doctor=${encodeURIComponent(doc.name)}&specialty=${encodeURIComponent(doc.specialty)}&location=${encodeURIComponent(doc.location)}`;
+					window.location.href = url;
+				});
+	});
 }
 
-/* 🌐 Navbar */
-.navbar {
-  background: linear-gradient(90deg, #4e54c8, #8f94fb);
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+// Initial render
+document.addEventListener('DOMContentLoaded', () => {
+	renderDoctors(demoDoctors);
+});
 
-.navbar .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fff;
-}
+// Filter doctors on search
+document.getElementById('doctorSearchForm').addEventListener('submit', function(e) {
+	const doctor = this.doctor.value.trim().toLowerCase();
+	const specialty = this.specialty.value.trim().toLowerCase();
+	const location = this.location.value.trim().toLowerCase();
+	if (!doctor && !specialty && !location) {
+		alert('Please enter at least one search field.');
+		e.preventDefault();
+		return;
+	}
+	e.preventDefault();
+	const filtered = demoDoctors.filter(doc =>
+		(!doctor || doc.name.toLowerCase().includes(doctor)) &&
+		(!specialty || doc.specialty.toLowerCase().includes(specialty)) &&
+		(!location || doc.location.toLowerCase().includes(location))
+	);
+	renderDoctors(filtered);
+	// Scroll to doctors section
+	document.getElementById('demo-doctors').scrollIntoView({ behavior: 'smooth' });
+});
 
-.navbar .nav-links {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
+// Smooth scroll for nav links
+document.querySelectorAll('.nav a, .footer-links a').forEach(link => {
+		link.addEventListener('click', function(e) {
+				const href = this.getAttribute('href');
+				if (href.startsWith('#')) {
+						const target = document.querySelector(href);
+						if (target) {
+								e.preventDefault();
+								target.scrollIntoView({ behavior: 'smooth' });
+						}
+				}
+		});
+});
 
-.navbar .nav-links li a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease-in-out;
-}
+// Card hover effect (for accessibility)
+document.querySelectorAll('.card').forEach(card => {
+		card.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter' || e.key === ' ') {
+						this.classList.toggle('active');
+				}
+		});
+		card.setAttribute('tabindex', '0');
+});
 
-.navbar .nav-links li a:hover {
-  color: #ffe066;
-}
-
-/* 🏠 Sections */
-.section {
-  padding: 60px 10%;
-  background: #fff;
-  margin: 30px auto;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.section h2 {
-  font-size: 2rem;
-  color: #4e54c8;
-  margin-bottom: 20px;
-  border-left: 5px solid #8f94fb;
-  padding-left: 10px;
-}
-
-.intro {
-  text-align: center;
-  background: linear-gradient(135deg, #4e54c8, #8f94fb);
-  color: #fff;
-}
-
-.intro h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-.intro .title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.intro .desc {
-  max-width: 700px;
-  margin: auto;
-  font-size: 1rem;
-}
-
-/* 🎯 Skills */
-.skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.skills span {
-  background: #8f94fb;
-  color: #fff;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  transition: background 0.3s ease-in-out;
-}
-
-.skills span:hover {
-  background: #4e54c8;
-}
-
-/* 📂 Projects */
-.project-card {
-  background: #f8f9ff;
-  padding: 20px;
-  margin: 15px 0;
-  border-left: 5px solid #4e54c8;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
-}
-
-.project-card:hover {
-  transform: translateY(-5px);
-}
-
-/* 📧 Contact */
-.contact-info {
-  list-style: none;
-  margin-bottom: 20px;
-}
-
-.contact-info li {
-  margin: 8px 0;
-  font-size: 1rem;
-}
-
-.contact-info a {
-  color: #4e54c8;
-  text-decoration: none;
-}
-
-.contact-info a:hover {
-  text-decoration: underline;
-}
-
-/* Contact Form */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.contact-form label {
-  font-weight: 600;
-}
-
-.contact-form input,
-.contact-form textarea {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
-  transition: border 0.3s ease-in-out;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-  border: 1px solid #4e54c8;
-}
-
-.contact-form input[type="submit"] {
-  background: linear-gradient(90deg, #4e54c8, #8f94fb);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.contact-form input[type="submit"]:hover {
-  background: linear-gradient(90deg, #8f94fb, #4e54c8);
-}
-
-/* 📌 Interests */
-#interests ul {
-  margin-top: 15px;
-  padding-left: 20px;
-}
-
-#interests li {
-  margin-bottom: 10px;
-  list-style: square;
-}
-
-/* ⚡ Footer */
-footer {
-  text-align: center;
-  background: #4e54c8;
-  color: #fff;
-  padding: 15px;
-  margin-top: 40px;
-  border-radius: 10px 10px 0 0;
-}
-
-/* 📱 Responsive Design */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .section {
-    padding: 40px 5%;
-  }
-}
+// Search icon focus opens search form (for demo)
+document.querySelector('.search-icon').addEventListener('click', () => {
+		document.querySelector('.search-form input').focus();
+});
